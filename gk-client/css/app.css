@@ -1,0 +1,49 @@
+nav{
+    display: inline-block;
+    width: 100%;
+}
+
+
+#users{
+    width: 100%;
+}
+
+
+#active-user-list,#user-list{
+    background: #cccccc;
+    padding: 10px;
+    border-left: 1px solid #000;
+}
+
+#logout{
+    margin: 20px;
+    display: inline-block;
+    float: right;
+    padding: 10px 20px;
+    border: 0;
+}
+
+ul li{
+    list-style: none;
+    display: inline;
+}
+ul span{
+    font-weight: bold;
+}
+
+.user{
+    background: #fff;
+    padding: 10px;
+    margin-bottom: 10px;
+}
+
+.online{
+    color: #009441;
+}
+
+.alert{
+    position: absolute;
+    top: 0;
+    left: 0;
+    display: none;
+}

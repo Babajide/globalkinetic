@@ -1,0 +1,169 @@
+<html>
+<head>
+    <!-- Latest compiled and minified CSS & JS -->
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+    <link rel="stylesheet" media="screen" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+
+
+    <script>
+        $(document).ready(function () {
+            $("#registration").submit(function (event) {
+                event.preventDefault();
+                $.ajax({
+                    type: 'POST',
+                    url: 'http://localhost:8484/api/user/add',
+                    data: JSON.stringify($("#registration").serializeFormJSON()),
+                    contentType: "application/json; charset=utf-8",
+                    dataType: 'json',
+                    xhrFields: {
+                        withCredentials: true
+                    },
+                    success: function () {
+                        //console.log("response" + data);
+                        alert("User added")
+                        $(".alert").removeClass("hide");
+                        setTimeout(function() {
+                            $(".alert").addClass("hide");
+                        }, 5000);
+                    },
+                    error: function (xhr, textStatus, error) {
+                        alert("Error please try again")
+                        console.log(xhr.statusText);
+                        console.log(textStatus);
+                        console.log(error);
+
+                    }
+                });
+
+
+            });
+        });
+
+
+        //login
+        $(document).ready(function () {
+            $("#login").submit(function (event) {
+                event.preventDefault();
+
+                console.log($("#login").serialize())
+                $.ajax({
+                    type: 'POST',
+                    url: 'http://localhost:8484/api/user/login',
+                    data: $("#login").serialize(),
+                    crossDomain: true,
+                    xhrFields: {
+                        withCredentials: true
+                    },
+                    contentType: "application/x-www-form-urlencoded",
+                    success: function (data) {
+                        alert("Login Successful :)")
+                        console.log(data);
+                        var data = $.parseJSON(data);
+                        var token = data.token;
+                        var id = data.id;
+                        $.cookie('JSESSIOINID', token);
+                        localStorage.setItem("token", token);
+                        window.location = "dashboard.html";
+                    },
+                    error: function (xhr, textStatus, error) {
+                        alert("Invalid username and pass")
+                        console.log(xhr.statusText);
+                        console.log(textStatus);
+                        console.log(error);
+                    },
+                    complete: function (XMLHttpRequest, textStatus) {
+                        var headers = XMLHttpRequest.getAllResponseHeaders();
+                        console.log(headers);
+                        console.log(textStatus);
+                    }
+                });
+
+            });
+        });
+
+
+        (function ($) {
+            $.fn.serializeFormJSON = function () {
+                var o = {};
+                var a = this.serializeArray();
+                $.each(a, function () {
+                    if (o[this.name]) {
+                        if (!o[this.name].push) {
+                            o[this.name] = [o[this.name]];
+                        }
+                        o[this.name].push(this.value || '');
+                    } else {
+                        o[this.name] = this.value || '';
+                    }
+                });
+                return o;
+            };
+        })(jQuery);
+
+    </script>
+
+</head>
+
+
+<body>
+<div class="col-md-4 col-md-offset-4">
+    <div class="alert hide alert-success">
+        <strong>Success!</strong> Added the user
+    </div>
+    <div class="panel panel-default">
+        <div class="panel-body">
+            <form method="post" role="form" id="registration" action="#">
+                <legend>User Registration</legend>
+                <div class="form-group">
+                    <label for="userName"></label>
+                    <input type="text" class="form-control" name="userName" id="userName" placeholder="Username...">
+                </div>
+                <div class="form-group">
+                    <label for="phoneNumber"></label>
+                    <input type="text" class="form-control" name="phoneNumber" id="phoneNumber"
+                           placeholder="Phone Number...">
+                </div>
+                <div class="form-group">
+                    <label for="password"></label>
+                    <input type="password" class="form-control" name="password" id="password" placeholder="Password...">
+                </div>
+                <div class="form-group">
+                    <button type="submit" class="btn btn-primary" id="register">Register</button>
+                </div>
+            </form>
+
+        </div>
+    </div>
+
+
+    <div class="panel panel-default">
+        <div class="panel-body">
+            <div>
+                <form method="post" role="form" id="login">
+                    <legend>User Login</legend>
+                    <div class="form-group">
+                        <label for="user"></label>
+                        <input type="text" class="form-control" name="user" id="user" placeholder="Username...">
+                    </div>
+
+                    <div class="form-group">
+                        <label for="pass"></label>
+                        <input type="password" class="form-control" name="pass" id="pass" placeholder="Password...">
+                    </div>
+                    <button type="submit" class="btn btn-primary">Login</button>
+                </form>
+
+            </div>
+
+        </div>
+    </div>
+
+</div>
+
+    <script src="js/jquery.cookie.js"></script>
+</body>
+</html>
+
+
+
